@@ -429,14 +429,13 @@ public class BuildPipelineView extends View {
         final AbstractBuild<?, ?> triggerBuild = (AbstractBuild<?, ?>) Run.fromExternalizableId(externalizableId);
         final AbstractProject<?, ?> triggerProject = triggerBuild.getProject();
         
-        List<Action> actions = removeUserIdAndUpstreamCauseActions(triggerBuild.getActions());
+        final List<Action> actions = removeUserIdAndUpstreamCauseActions(triggerBuild.getActions());
         
         Cause.UpstreamCause upstreamCause = triggerBuild.getCause(Cause.UpstreamCause.class);
         
-        
-        if(upstreamCause != null) {
-        	LOGGER.fine(String.format("Adding Upstream Cause: %s", upstreamCause.getShortDescription()));
-        	actions.add(new CauseAction(upstreamCause));
+        if (upstreamCause != null) {
+            LOGGER.fine(String.format("Adding Upstream Cause: %s", upstreamCause.getShortDescription()));
+            actions.add(new CauseAction(upstreamCause));
         }
 
         
@@ -635,11 +634,11 @@ public class BuildPipelineView extends View {
        return retval;
    }
 
-    /**
+    /*
      * Removes any UserId and Upstream cause action from the given actions collection. This is used by downstream builds that inherit upstream actions.
-     * The downstream build can be initiated by another user that is different from the user who initiated the upstream build, so the
-     * downstream build needs to remove the old user action inherited from upstream, and add its own.  Also, reseting the upstream cause will prevent multiple upstream
-     * cause entries.
+     * The downstream build can be initiated by another user that is different from the user who initiated the upstream build, 
+     * so the downstream build needs to remove the old user action inherited from upstream, and add its own.  Also, reseting the 
+     * upstream cause will prevent multiple upstream cause entries.
      *
      * @param actions
      *            a collection of build actions.
